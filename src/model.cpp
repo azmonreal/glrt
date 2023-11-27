@@ -35,7 +35,7 @@ bool Model::load(const std::string& path) {
 		if(token == "o") {
 			if(mesh.name != "") {
 				meshes.push_back(mesh);
-				start_index = mesh.vertices.size() + 1;
+				start_index += mesh.vertices.size();
 			}
 			mesh = Mesh{};
 			stream >> mesh.name;
