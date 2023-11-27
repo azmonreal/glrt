@@ -5,20 +5,39 @@
 #include <iostream>
 #include <vector>
 
+#include "matrix4x1.hpp"
 #include "model.hpp"
 
 using namespace GLRT;
 
 Model cube{};
 
+// rubiks cube
+std::vector<Vector3> colors = {
+	{{1.0, 0.0, 0.0}},  // red
+	{{0.0, 1.0, 0.0}},  // green
+	{{0.0, 0.0, 1.0}},  // blue
+	{{1.0, 1.0, 1.0}},  // white
+	{{1.0, 1.0, 0.0}},  // yellow
+	{{1.0, 0.5, 0.0}},  // orange
+
+};
+
 float grados = 0;
 void display(void) {
 	/*  clear all pixels  */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glColor3f(1.0, 0.0, 0.0);
+	int color_index = 0;
+
+	auto model_transform = cube.transform.getMatrix();
 	for(auto& mesh : cube.meshes) {
+		auto mesh_transform = mesh.transform.getMatrix();
+		// std::cout << "mult: "<< (model_transform * mesh_transform).to_string() << std::endl;
+
 		for(auto& face : mesh.faces) {
+			glColor3dv(colors[color_index++ % colors.size()].data());
+
 			switch(face.indices.size()) {
 				case 3:
 					glBegin(GL_TRIANGLES);
@@ -32,8 +51,9 @@ void display(void) {
 			}
 
 			for(auto& index : face.indices) {
-				auto& vertex = mesh.vertices[index];
-				glVertex3dv(vertex.position.data());
+				auto transformed_vertex = model_transform * mesh_transform * Matrix4x1{mesh.vertices[index].position, 1};
+				// std::cout << Vector4{transformed_vertex} << std::endl;
+				glVertex3dv(Vector4{transformed_vertex}.data());
 			}
 			glEnd();
 		}
@@ -75,7 +95,11 @@ int main(int argc, char** argv) {
 	std::string base_path = "/home/azmonreal/dev/libs/glrt";
 
 	cube.load("/home/azmonreal/dev/libs/glrt/examples/resources/untitled.obj");
-	cube.print();
+	// cube.print();
+
+	cube.transform.scale({{1.2, 1.2, 1.2}});
+	cube.transform.translate({{2, 0, -2}});
+	cube.transform.rotate({{10, 10, -10}});
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);

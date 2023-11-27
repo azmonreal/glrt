@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "mesh.hpp"
+#include "transform.hpp"
 
 namespace GLRT {
 class Model {
@@ -17,5 +18,6 @@ class Model {
 
 	std::string name;
 	std::vector<Mesh> meshes;
+	Transform transform{};
 };
 }  // namespace GLRT
