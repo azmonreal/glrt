@@ -8,6 +8,7 @@ template <size_t M, size_t N>
 class Matrix {
    public:
 	Matrix();
+	Matrix(Matrix<M, N>&);
 	Matrix(const Matrix<M, N>&);
 	Matrix(std::array<std::array<double, N>, M>&);
 	Matrix(const std::array<std::array<double, N>, M>&);
@@ -43,7 +44,8 @@ class Matrix {
 	Matrix<M, N>& operator/=(const double&);
 
 	std::string to_string() const;
-   private:
+
+   protected:
 	std::array<std::array<double, N>, M> m_data;
 };
 
@@ -55,6 +57,16 @@ Matrix<M, N>::Matrix() {
 		}
 	}
 }
+
+template <size_t M, size_t N>
+Matrix<M, N>::Matrix(Matrix<M, N>& other) {
+	for(int i = 0; i < M; ++i) {
+		for(int j = 0; j < N; ++j) {
+			m_data[i][j] = other[i][j];
+		}
+	}
+}
+
 template <size_t M, size_t N>
 Matrix<M, N>::Matrix(const Matrix<M, N>& other) {
 	for(int i = 0; i < M; ++i) {
