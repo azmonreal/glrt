@@ -1,10 +1,12 @@
 #pragma once
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "animation.hpp"
+#include "material.hpp"
 #include "mesh.hpp"
 #include "transform.hpp"
 
@@ -15,6 +17,7 @@ class Model {
 	~Model();
 
 	bool load(const std::string& path);
+	bool load_materials(const std::string& path);
 
 	Matrix4 getTransform() const;
 
@@ -22,6 +25,7 @@ class Model {
 
 	std::string name;
 	std::vector<Mesh> meshes;
+	std::map<std::string, Material> materials;
 
 	Animation animation;
 	Transform transform;

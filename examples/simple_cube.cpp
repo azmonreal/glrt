@@ -37,13 +37,16 @@ void draw_model(Model& model) {
 	model.animation.Update(0.01);
 
 	auto model_transform = model.getTransform();
+
 	for(auto& mesh : model.meshes) {
+		auto material = model.materials[mesh.material];
+
 		auto mesh_transform = mesh.transform.getMatrix();
 		auto combined_transformed = model_transform * mesh_transform;
 
 		Vector3 mesh_color = Vector3{{0.5, 0.5, 0.5}};
 
-		auto ambient_color = ambient.color * mesh_color;
+		auto ambient_color = ambient.color * material.ambient;
 
 		for(auto& face : mesh.faces) {
 			auto center = Vector4{combined_transformed * Matrix4x1{face.center, 1}};
@@ -79,7 +82,7 @@ void draw_model(Model& model) {
 
 				if(factor < 0) factor = 0;
 
-				diffuse_color += light_color * mesh_color * factor;
+				diffuse_color += light_color * factor * material.diffuse;
 			}
 
 			auto face_color = ambient_color + diffuse_color;
@@ -138,7 +141,7 @@ void init(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	gluLookAt(10.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	gluLookAt(20.0, 20.0, 20.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 	glEnable(GL_DEPTH_TEST);
 }
@@ -166,7 +169,7 @@ int main(int argc, char** argv) {
 	sphere.animation = Animation{3, {{kf1, 0}, {kf2, 1}, {kf3, 2}}};
 	sphere.animation.loopMode = Animation::LoopMode::PING_PONG;
 
-	models.push_back(sphere);
+	// models.push_back(sphere);
 
 	Model cube;
 	cube.load("resources/cube.obj");
@@ -175,7 +178,7 @@ int main(int argc, char** argv) {
 	//
 	Transform kf1c{};
 	kf1c.translate({{-1, 0, 0}});
-	kf1c.rotate(Vector3{{0,  0, 0}});
+	kf1c.rotate(Vector3{{0, 0, 0}});
 	Transform kf2c{};
 	kf2c.translate({{-2, 0, 0}});
 	kf2c.rotate(Vector3{{0, 30, 0}});
@@ -186,7 +189,11 @@ int main(int argc, char** argv) {
 	cube.animation = Animation{3, {{kf1c, 0}, {kf2c, 1}, {kf3c, 2}}};
 	cube.animation.loopMode = Animation::LoopMode::PING_PONG;
 	cube.animation.interpolationMode = Animation::InterpolationMode::STEP;
-	models.push_back(cube);
+	// models.push_back(cube);
+
+	Model cubes;
+	cubes.load("resources/cubes.obj");
+	models.push_back(cubes);
 
 	ambient.color = {{0.5, 0.5, 0.5}};
 
@@ -203,9 +210,9 @@ int main(int argc, char** argv) {
 	lights.push_back(l2);
 
 	auto l3 = Light{};
-	l3.color = {{0.0, 0.0, 1.0}};
+	l3.color = {{0.7, 0.7, 0.7}};
 	l3.position = {{0.0, 0.0, 0.0}};
-	l3.direction = {{-1.0, 1.0, -1.0}};
+	l3.direction = {{-1.0, -1.0, -1.0}};
 	lights.push_back(l3);
 
 	glutInit(&argc, argv);
