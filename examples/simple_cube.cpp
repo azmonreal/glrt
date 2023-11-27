@@ -143,9 +143,7 @@ void init(void) {
  *  Enter main loop and process events.
  */
 int main(int argc, char** argv) {
-	std::string base_path = "/home/azmonreal/dev/libs/glrt";
-
-	cube.load("/home/azmonreal/dev/libs/glrt/examples/resources/sphere.obj");
+	cube.load("resources/sphere.obj");
 	// cube.print();
 
 	cube.transform.scale({2});
