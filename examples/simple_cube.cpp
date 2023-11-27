@@ -12,16 +12,12 @@
 using namespace GLRT;
 using namespace std;
 
-Model cube{};
+std::vector<Model> models{};
 Light ambient;
 std::vector<Light> lights;
 
-float grados = 0;
-void display(void) {
-	/*  clear all pixels  */
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	for(auto light : lights){
+void draw_lights() {
+	for(auto light : lights) {
 		// draw sphere
 		glColor3dv(light.color.data());
 		glPushMatrix();
@@ -29,18 +25,17 @@ void display(void) {
 		glutSolidSphere(0.1, 20, 20);
 		glPopMatrix();
 
-		if(light.direction.length() > 0){
+		if(light.direction.length() > 0) {
 			glBegin(GL_LINES);
 			glVertex3dv(light.position.data());
 			glVertex3dv((light.position + light.direction.normalized()).data());
 			glEnd();
 		}
 	}
-
-	int color_index = 0;
-
-	auto model_transform = cube.transform.getMatrix();
-	for(auto& mesh : cube.meshes) {
+}
+void draw_model(Model model) {
+	auto model_transform = model.transform.getMatrix();
+	for(auto& mesh : model.meshes) {
 		auto mesh_transform = mesh.transform.getMatrix();
 		auto combined_transformed = model_transform * mesh_transform;
 
@@ -49,7 +44,6 @@ void display(void) {
 		auto ambient_color = ambient.color * mesh_color;
 
 		for(auto& face : mesh.faces) {
-
 			auto center = Vector4{combined_transformed * Matrix4x1{face.center, 1}};
 			auto normal = Vector4{combined_transformed * Matrix4x1{face.normal, 0}};
 
@@ -62,7 +56,7 @@ void display(void) {
 
 			Vector3 diffuse_color{};
 
-			for(auto light : lights){
+			for(auto light : lights) {
 				auto light_color = light.color;
 				auto light_direction = light.direction.normalized();
 				auto light_position = light.position;
@@ -70,7 +64,8 @@ void display(void) {
 				Vector3 dir_to_light;
 
 				if(light_direction.length() > 0) dir_to_light = light_direction * -1;
-				else dir_to_light = (light_position - Vector3{center}).normalized();
+				else
+					dir_to_light = (light_position - Vector3{center}).normalized();
 
 				glColor3dv(light_color.data());
 				// glBegin(GL_LINES);
@@ -109,6 +104,17 @@ void display(void) {
 			glEnd();
 		}
 	}
+}
+
+void display(void) {
+	/*  clear all pixels  */
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	draw_lights();
+
+	for(auto model : models) {
+		draw_model(model);
+	}
 
 	glutSwapBuffers();
 	glFlush();
@@ -143,12 +149,18 @@ void init(void) {
  *  Enter main loop and process events.
  */
 int main(int argc, char** argv) {
-	cube.load("resources/sphere.obj");
-	// cube.print();
+	Model sphere{};
+	sphere.load("resources/sphere.obj");
 
-	cube.transform.scale({2});
-	cube.transform.translate({{2, 0, -2}});
+	sphere.transform.scale({2});
+	sphere.transform.translate({{2, 0, -2}});
+	models.push_back(sphere);
+
+	Model cube;
+	cube.load("resources/cube.obj");
+	cube.transform.translate({{-2, 0, 0}});
 	// cube.transform.rotate({{10, 10, -10}});
+	models.push_back(cube);
 
 	ambient.color = {{0.5, 0.5, 0.5}};
 
@@ -167,7 +179,7 @@ int main(int argc, char** argv) {
 	auto l3 = Light{};
 	l3.color = {{0.0, 0.0, 1.0}};
 	l3.position = {{0.0, 0.0, 0.0}};
-	l3.direction = {{-1.0,1.0, -1.0}};
+	l3.direction = {{-1.0, 1.0, -1.0}};
 	lights.push_back(l3);
 
 	glutInit(&argc, argv);
