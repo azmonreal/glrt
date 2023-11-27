@@ -70,6 +70,8 @@ Matrix4 Transform::getMatrix() const {
 	Matrix4 rotation = rotation_matrix({{0, 0, 1}}, m_rotation[2]) * rotation_matrix({{0, 1, 0}}, m_rotation[1]) * rotation_matrix({{1, 0, 0}}, m_rotation[0]);
 	Matrix4 scale = scale_matrix(m_scale);
 
+	auto local = translation * rotation * scale;
+
 	return translation * rotation * scale;
 }
 

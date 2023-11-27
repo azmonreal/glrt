@@ -77,6 +77,10 @@ bool Model::load(const std::string& path) {
 	return true;
 }
 
+Matrix4 Model::getTransform() const {
+	return transform.getMatrix() * animation.GetTransform().getMatrix();
+}
+
 void Model::print() {
 	std::cout << "Model: " << name << std::endl;
 	std::cout << "Meshes: " << meshes.size() << std::endl;

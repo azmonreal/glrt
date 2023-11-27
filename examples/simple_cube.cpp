@@ -33,8 +33,12 @@ void draw_lights() {
 		}
 	}
 }
-void draw_model(Model model) {
-	auto model_transform = model.transform.getMatrix();
+void draw_model(Model& model) {
+	model.animation.Update(0.01);
+
+	cout << model.animation.GetTime() << endl;
+
+	auto model_transform = model.getTransform();
 	for(auto& mesh : model.meshes) {
 		auto mesh_transform = mesh.transform.getMatrix();
 		auto combined_transformed = model_transform * mesh_transform;
@@ -45,7 +49,7 @@ void draw_model(Model model) {
 
 		for(auto& face : mesh.faces) {
 			auto center = Vector4{combined_transformed * Matrix4x1{face.center, 1}};
-			auto normal = Vector4{combined_transformed * Matrix4x1{face.normal, 0}};
+			auto normal = Vector4{combined_transformed * Matrix4x1{face.normal, 0}}.normalized();
 
 			glColor3dv(Vector3{{1.0, 1.0, 1.0}}.data());
 
@@ -112,7 +116,7 @@ void display(void) {
 
 	draw_lights();
 
-	for(auto model : models) {
+	for(auto& model : models) {
 		draw_model(model);
 	}
 
@@ -154,6 +158,13 @@ int main(int argc, char** argv) {
 
 	sphere.transform.scale({2});
 	sphere.transform.translate({{2, 0, -2}});
+
+	Transform kf1{};
+	kf1.scale({1});
+	Transform kf2{};
+	kf1.scale({2});
+	sphere.animation = Animation{2, {{kf1, 0}, {kf2, 1}}};
+
 	models.push_back(sphere);
 
 	Model cube;

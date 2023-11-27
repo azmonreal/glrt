@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "animation.hpp"
 #include "face.hpp"
 #include "transform.hpp"
 #include "vertex.hpp"
@@ -18,6 +19,8 @@ class Mesh {
 	std::string name;
 	std::vector<Vertex> vertices;
 	std::vector<Face> faces;
+
+	Animation animation;
 	Transform transform{};
 };
 }  // namespace GLRT
