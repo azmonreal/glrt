@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "face.hpp"
@@ -11,6 +12,9 @@ class Mesh {
 	Mesh();
 	~Mesh();
 
+	void print();
+
+	std::string name;
 	std::vector<Vertex> vertices;
 	std::vector<Face> faces;
 };

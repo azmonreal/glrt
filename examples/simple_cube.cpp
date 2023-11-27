@@ -11,46 +11,33 @@ using namespace GLRT;
 
 Model cube{};
 
-std::vector<Vector3> vertex_list = {
-	{{-1.0, -1.0, -1.0}},
-	{{1.0, -1.0, -1.0}},
-	{{1.0, 1.0, -1.0}},
-	{{-1.0, 1.0, -1.0}},
-	{{-1.0, -1.0, 1.0}},
-	{{1.0, -1.0, 1.0}},
-	{{1.0, 1.0, 1.0}},
-	{{-1.0, 1.0, 1.0}}};
-
-std::vector<std::array<int, 3>> index_list = {
-	{{0, 1, 2}},
-	{{0, 2, 3}},
-	{{4, 6, 5}},
-	{{4, 7, 6}},
-	{{4, 5, 1}},
-	{{4, 1, 0}},
-	{{3, 2, 6}},
-	{{3, 6, 7}},
-	{{1, 5, 6}},
-	{{1, 6, 2}},
-	{{4, 0, 3}},
-	{{4, 3, 7}}};
-
 float grados = 0;
 void display(void) {
 	/*  clear all pixels  */
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glColor3f(1.0, 0.0, 0.0);
-	glBegin(GL_TRIANGLES);
 	for(auto& mesh : cube.meshes) {
 		for(auto& face : mesh.faces) {
+			switch(face.indices.size()) {
+				case 3:
+					glBegin(GL_TRIANGLES);
+					break;
+				case 4:
+					glBegin(GL_QUADS);
+					break;
+				default:
+					glBegin(GL_POLYGON);
+					break;
+			}
+
 			for(auto& index : face.indices) {
 				auto& vertex = mesh.vertices[index];
 				glVertex3dv(vertex.position.data());
 			}
+			glEnd();
 		}
 	}
-	glEnd();
 
 	glutSwapBuffers();
 	glFlush();
@@ -85,23 +72,10 @@ void init(void) {
  *  Enter main loop and process events.
  */
 int main(int argc, char** argv) {
-	Mesh cube_mesh{};
+	std::string base_path = "/home/azmonreal/dev/libs/glrt";
 
-	for(auto& vertex : vertex_list) {
-		cube_mesh.vertices.push_back(vertex);
-	}
-
-	for(auto& index : index_list) {
-		Face f;
-
-		for(auto& i : index) {
-			f.indices.push_back(i);
-		}
-
-		cube_mesh.faces.push_back(f);
-	}
-
-	cube.meshes.push_back(cube_mesh);
+	cube.load("/home/azmonreal/dev/libs/glrt/examples/resources/untitled.obj");
+	cube.print();
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
