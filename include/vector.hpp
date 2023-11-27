@@ -14,8 +14,12 @@ class Vector {
 	Vector();
 	Vector(const std::array<double, N>&);
 	Vector(const Vector<N>&);
+	template <size_t M>
+	Vector(const Vector<M>&);
 	Vector(const Vector<N - 1>&, double);
 	Vector(const Matrix<N, 1>&);
+	Vector(const double);
+	
 	~Vector();
 
 	double& operator[](int);
@@ -70,6 +74,14 @@ Vector<N>::Vector(const Vector<N>& other) {
 }
 
 template <size_t N>
+template <size_t M>
+Vector<N>::Vector(const Vector<M>& other) {
+	for(int i = 0; i < N; ++i) {
+		m_data[i] = other[i];
+	}
+}
+
+template <size_t N>
 Vector<N>::Vector(const Vector<N - 1>& other, double value) {
 	for(int i = 0; i < N - 1; ++i) {
 		m_data[i] = other[i];
@@ -81,6 +93,13 @@ template <size_t N>
 Vector<N>::Vector(const Matrix<N, 1>& other) {
 	for(int i = 0; i < N; ++i) {
 		m_data[i] = other[i][0];
+	}
+}
+
+template <size_t N>
+Vector<N>::Vector(const double value) {
+	for(int i = 0; i < N; ++i) {
+		m_data[i] = value;
 	}
 }
 
