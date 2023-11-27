@@ -1,5 +1,6 @@
 #include "model.hpp"
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -51,8 +52,21 @@ bool Model::load(const std::string& path) {
 				std::string index_token;
 
 				std::getline(index_stream, index_token, '/');
-				f.indices.push_back(std::stoi(index_token) - start_index);
+
+				auto i = std::stoi(index_token) - start_index;
+
+				f.center += mesh.vertices[i].position;
+				f.indices.push_back(i);
 			}
+
+			f.center /= f.indices.size();
+
+			auto v1 = mesh.vertices[f.indices[0]].position;
+			auto v2 = mesh.vertices[f.indices[1]].position;
+			auto v3 = mesh.vertices[f.indices[2]].position;
+
+			f.normal = (v2 - v1).cross(v3 - v1).normalized();
+
 			mesh.faces.push_back(f);
 		} else {
 			// std::cout << "Unknown token: " << token << std::endl;
