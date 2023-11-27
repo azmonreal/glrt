@@ -75,4 +75,13 @@ Matrix4 Transform::getMatrix() const {
 	return translation * rotation * scale;
 }
 
+Transform Transform::Lerp(const Transform& other, double t) const {
+	Transform result;
+
+	result.m_translation = m_translation  + (other.m_translation - m_translation) * t;
+	result.m_rotation = m_rotation + (other.m_rotation - m_rotation) * t;
+	result.m_scale = m_scale + (other.m_scale - m_scale) * t;
+
+	return result;
+}
 }  // namespace GLRT

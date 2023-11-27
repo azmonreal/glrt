@@ -19,6 +19,8 @@ class Transform {
 
 	Matrix4 getMatrix() const;
 
+	Transform Lerp(const Transform& other, double t) const;
+
    private:
 	Vector3 m_translation;
 	Vector3 m_rotation;

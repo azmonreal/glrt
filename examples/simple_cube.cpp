@@ -36,8 +36,6 @@ void draw_lights() {
 void draw_model(Model& model) {
 	model.animation.Update(0.01);
 
-	cout << model.animation.GetTime() << endl;
-
 	auto model_transform = model.getTransform();
 	for(auto& mesh : model.meshes) {
 		auto mesh_transform = mesh.transform.getMatrix();
@@ -162,8 +160,11 @@ int main(int argc, char** argv) {
 	Transform kf1{};
 	kf1.scale({1});
 	Transform kf2{};
-	kf1.scale({2});
-	sphere.animation = Animation{2, {{kf1, 0}, {kf2, 1}}};
+	kf2.scale({1.5});
+	Transform kf3{};
+	kf3.scale({2});
+	sphere.animation = Animation{3, {{kf1, 0}, {kf2, 1}, {kf3, 2}}};
+	sphere.animation.loopMode = Animation::LoopMode::PING_PONG;
 
 	models.push_back(sphere);
 
@@ -171,6 +172,20 @@ int main(int argc, char** argv) {
 	cube.load("resources/cube.obj");
 	cube.transform.translate({{-2, 0, 0}});
 	// cube.transform.rotate({{10, 10, -10}});
+	//
+	Transform kf1c{};
+	kf1c.translate({{-1, 0, 0}});
+	kf1c.rotate(Vector3{{0,  0, 0}});
+	Transform kf2c{};
+	kf2c.translate({{-2, 0, 0}});
+	kf2c.rotate(Vector3{{0, 30, 0}});
+	Transform kf3c{};
+	kf3c.translate({{-3, 0, 0}});
+	kf3c.rotate(Vector3{{0, 60, 0}});
+
+	cube.animation = Animation{3, {{kf1c, 0}, {kf2c, 1}, {kf3c, 2}}};
+	cube.animation.loopMode = Animation::LoopMode::PING_PONG;
+	cube.animation.interpolationMode = Animation::InterpolationMode::STEP;
 	models.push_back(cube);
 
 	ambient.color = {{0.5, 0.5, 0.5}};

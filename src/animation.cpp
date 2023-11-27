@@ -21,16 +21,35 @@ Animation::Animation(double duration, std::initializer_list<Keyframe> keyframes)
 Animation::~Animation() {}
 
 void Animation::Update(double time) {
-	m_time = m_time + time;
+	m_time = m_time + time * direction;
 
-	if(m_time > duration) {
-		m_time = m_time - duration;
+	switch(loopMode) {
+		case LoopMode::ONCE:
+			if(m_time > duration) {
+				m_time = duration;
+			}
+			break;
+		case LoopMode::LOOP:
+			if(m_time > duration) {
+				m_time = 0.0;
+			}
+			break;
+		case LoopMode::PING_PONG:
+			if(m_time > duration) {
+				m_time = duration;
+				direction = -1;
+			} else if(m_time < 0.0) {
+				m_time = 0.0;
+				direction = 1;
+			}
+			break;
 	}
 }
 
 Transform Animation::GetTransform() const {
 	// find keyframe with time less then m_time
 	size_t currentFrame = -1;
+	size_t nextFrame = -1;
 	for(size_t i = 0; i < m_keyframes.size(); i++) {
 		if(m_keyframes[i].time > m_time) {
 			break;
@@ -40,6 +59,22 @@ Transform Animation::GetTransform() const {
 
 	if(currentFrame == -1) {
 		return Transform{};
+	}
+
+	nextFrame = currentFrame + direction;
+	if(nextFrame >= m_keyframes.size() || nextFrame < 0) {
+		nextFrame = currentFrame - direction;
+	}
+
+	Transform result;
+
+	switch(interpolationMode) {
+		case InterpolationMode::STEP:
+			return m_keyframes[currentFrame].transform;
+		case InterpolationMode::LINEAR: {
+			double t = (m_time - m_keyframes[currentFrame].time) / (m_keyframes[nextFrame].time - m_keyframes[currentFrame].time);
+			return m_keyframes[currentFrame].transform.Lerp(m_keyframes[nextFrame].transform, t);
+		}
 	}
 
 	return m_keyframes[currentFrame].transform;
