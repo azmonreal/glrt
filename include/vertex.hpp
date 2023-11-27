@@ -1,7 +1,9 @@
 #pragma once
 
 #include <vector>
+
 #include "types.hpp"
+
 namespace GLRT {
 class Vertex {
    public:

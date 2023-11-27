@@ -7,7 +7,6 @@
 #include "matrix.hpp"
 
 namespace GLRT {
-
 template <size_t N>
 class Vector {
    public:
@@ -19,7 +18,7 @@ class Vector {
 	Vector(const Vector<N - 1>&, double);
 	Vector(const Matrix<N, 1>&);
 	Vector(const double);
-	
+
 	~Vector();
 
 	double& operator[](int);

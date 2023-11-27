@@ -2,6 +2,7 @@
 
 #include "matrix4.hpp"
 #include "types.hpp"
+
 namespace GLRT {
 class Transform {
    public:

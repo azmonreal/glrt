@@ -3,6 +3,7 @@
 #include <array>
 #include <cstddef>
 #include <string>
+
 namespace GLRT {
 template <size_t M, size_t N>
 class Matrix {

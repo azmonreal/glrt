@@ -12,7 +12,7 @@ void Mesh::print() {
 	for(auto& v : vertices) {
 		std::cout << "  " << v.position[0] << " " << v.position[1] << " " << v.position[2] << std::endl;
 	}
-	
+
 	std::cout << "Faces: " << faces.size() << std::endl;
 	for(auto& f : faces) {
 		std::cout << "  ";

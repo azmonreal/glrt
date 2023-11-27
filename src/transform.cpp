@@ -57,7 +57,7 @@ void Transform::translate(const Vector3& translation) {
 	m_translation += translation;
 }
 
-void Transform::rotate(const Vector3& rotation){
+void Transform::rotate(const Vector3& rotation) {
 	m_rotation += rotation;
 }
 
