@@ -19,8 +19,6 @@ class Matrix {
 
 	Matrix<M, N> operator+(const Matrix<M, N>&) const;
 	Matrix<M, N> operator-(const Matrix<M, N>&) const;
-	Matrix<M, N> operator*(const Matrix<M, N>&) const;
-	Matrix<M, N> operator/(const Matrix<M, N>&) const;
 
 	template <size_t P>
 	Matrix<M, P> operator*(const Matrix<N, P>&) const;
@@ -125,28 +123,6 @@ Matrix<M, N> Matrix<M, N>::operator-(const Matrix<M, N>& other) const {
 	for(int i = 0; i < M; ++i) {
 		for(int j = 0; j < N; ++j) {
 			result[i][j] = m_data[i][j] - other[i][j];
-		}
-	}
-	return result;
-}
-
-template <size_t M, size_t N>
-Matrix<M, N> Matrix<M, N>::operator*(const Matrix<M, N>& other) const {
-	Matrix<M, N> result;
-	for(int i = 0; i < M; ++i) {
-		for(int j = 0; j < N; ++j) {
-			result[i][j] = m_data[i][j] * other[i][j];
-		}
-	}
-	return result;
-}
-
-template <size_t M, size_t N>
-Matrix<M, N> Matrix<M, N>::operator/(const Matrix<M, N>& other) const {
-	Matrix<M, N> result;
-	for(int i = 0; i < M; ++i) {
-		for(int j = 0; j < N; ++j) {
-			result[i][j] = m_data[i][j] / other[i][j];
 		}
 	}
 	return result;
