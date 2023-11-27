@@ -18,6 +18,8 @@ bool Model::load(const std::string& path) {
 
 	meshes.clear();
 
+	name = std::filesystem::path(path).filename().string();
+
 	std::string line;
 
 	Mesh mesh;
