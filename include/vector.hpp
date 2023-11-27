@@ -4,6 +4,8 @@
 #include <cmath>
 #include <ostream>
 
+#include "matrix.hpp"
+
 namespace GLRT {
 
 template <size_t N>
@@ -13,6 +15,7 @@ class Vector {
 	Vector(const std::array<double, N>&);
 	Vector(const Vector<N>&);
 	Vector(const Vector<N - 1>&, double);
+	Vector(const Matrix<N, 1>&);
 	~Vector();
 
 	double& operator[](int);
@@ -72,6 +75,13 @@ Vector<N>::Vector(const Vector<N - 1>& other, double value) {
 		m_data[i] = other[i];
 	}
 	m_data[N - 1] = value;
+}
+
+template <size_t N>
+Vector<N>::Vector(const Matrix<N, 1>& other) {
+	for(int i = 0; i < N; ++i) {
+		m_data[i] = other[i][0];
+	}
 }
 
 template <size_t N>
