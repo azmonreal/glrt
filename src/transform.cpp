@@ -78,9 +78,19 @@ Matrix4 Transform::getMatrix() const {
 Transform Transform::Lerp(const Transform& other, double t) const {
 	Transform result;
 
-	result.m_translation = m_translation  + (other.m_translation - m_translation) * t;
+	result.m_translation = m_translation + (other.m_translation - m_translation) * t;
 	result.m_rotation = m_rotation + (other.m_rotation - m_rotation) * t;
 	result.m_scale = m_scale + (other.m_scale - m_scale) * t;
+
+	return result;
+}
+
+Transform Transform::BezierInterpolation(const Transform& other, const Transform& c1, const Transform& c2, double t) const {
+	Transform result;
+
+	result.m_translation = m_translation * pow(1 - t, 3) + c1.m_translation * 3 * t * pow(1 - t, 2) + c2.m_translation * 3 * pow(t, 2) * (1 - t) + other.m_translation * pow(t, 3);
+	result.m_rotation = m_rotation * pow(1 - t, 3) + c1.m_rotation * 3 * t * pow(1 - t, 2) + c2.m_rotation * 3 * pow(t, 2) * (1 - t) + other.m_rotation * pow(t, 3);
+	result.m_scale = m_scale * pow(1 - t, 3) + c1.m_scale * 3 * t * pow(1 - t, 2) + c2.m_scale * 3 * pow(t, 2) * (1 - t) + other.m_scale * pow(t, 3);
 
 	return result;
 }

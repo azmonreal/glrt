@@ -14,11 +14,6 @@ class Animation {
 		PING_PONG,
 	};
 
-	enum class InterpolationMode {
-		STEP,
-		LINEAR,
-	};
-
 	Animation();
 	Animation(double duration, const std::vector<Keyframe>& keyframes);
 	Animation(double duration, std::initializer_list<Keyframe> keyframes);
@@ -31,7 +26,7 @@ class Animation {
 	void AddKeyFrame(Keyframe keyframe);
 
 	LoopMode loopMode = LoopMode::LOOP;
-	InterpolationMode interpolationMode = InterpolationMode::LINEAR;
+
 
    private:
 	std::vector<Keyframe> m_keyframes;

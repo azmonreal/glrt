@@ -177,23 +177,37 @@ int main(int argc, char** argv) {
 	// cube.transform.rotate({{10, 10, -10}});
 	//
 	Transform kf1c{};
-	kf1c.translate({{-1, 0, 0}});
-	kf1c.rotate(Vector3{{0, 0, 0}});
+	kf1c.translate({{-3, 0, -3}});
+	// kf1c.rotate(Vector3{{0, 0, 0}});
 	Transform kf2c{};
-	kf2c.translate({{-2, 0, 0}});
-	kf2c.rotate(Vector3{{0, 30, 0}});
+	kf2c.translate({{3, 0, 3}});
+	// kf2c.rotate(Vector3{{0, 30, 0}});
 	Transform kf3c{};
 	kf3c.translate({{-3, 0, 0}});
-	kf3c.rotate(Vector3{{0, 60, 0}});
+	// kf3c.rotate(Vector3{{0, 60, 0}});
 
-	cube.animation = Animation{3, {{kf1c, 0}, {kf2c, 1}, {kf3c, 2}}};
+	Transform c1{};
+	c1.translate({{-3, 0, 0}});
+	Transform c2{};
+	c2.translate({{3, 0, 0}});
+
+	Keyframe k1{kf1c, 0, Keyframe::InterpolationMode::BEZIER};
+	Keyframe k2{kf2c, 10, Keyframe::InterpolationMode::BEZIER};
+
+	k1.controlPoints[0] = c1;
+	k1.controlPoints[1] = c2;
+
+	k2.controlPoints[0] = c2;
+	k2.controlPoints[1] = c1;
+
+	cube.animation = Animation{10, {k1, k2}};
 	cube.animation.loopMode = Animation::LoopMode::PING_PONG;
-	cube.animation.interpolationMode = Animation::InterpolationMode::STEP;
-	// models.push_back(cube);
+	// cube.animation.interpolationMode = Animation::InterpolationMode::STEP;
+	models.push_back(cube);
 
 	Model cubes;
 	cubes.load("resources/cubes.obj");
-	models.push_back(cubes);
+	// models.push_back(cubes);
 
 	ambient.color = {{0.5, 0.5, 0.5}};
 

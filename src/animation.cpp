@@ -1,5 +1,7 @@
 #include "animation.hpp"
 
+#include <iostream>
+
 namespace GLRT {
 Animation::Animation() : m_keyframes(), m_time(0.0) {
 	m_keyframes.emplace_back(Transform(), 0.0);
@@ -48,36 +50,65 @@ void Animation::Update(double time) {
 
 Transform Animation::GetTransform() const {
 	// find keyframe with time less then m_time
-	size_t currentFrame = -1;
-	size_t nextFrame = -1;
-	for(size_t i = 0; i < m_keyframes.size(); i++) {
-		if(m_keyframes[i].time > m_time) {
-			break;
+	size_t current_index, next_index;
+
+	if(direction == 1) {
+		current_index = -1;
+		for(size_t i = 0; i < m_keyframes.size(); i++) {
+			if(m_keyframes[i].time > m_time) {
+				break;
+			}
+			current_index = i;
 		}
-		currentFrame = i;
+	} else {
+		current_index = m_keyframes.size();
+		for(size_t i = m_keyframes.size() - 1; i >= 0; i--) {
+			if(m_keyframes[i].time < m_time) {
+				break;
+			}
+			current_index = i;
+		}
 	}
 
-	if(currentFrame == -1) {
+	if(current_index == -1) {
 		return Transform{};
 	}
 
-	nextFrame = currentFrame + direction;
-	if(nextFrame >= m_keyframes.size() || nextFrame < 0) {
-		nextFrame = currentFrame - direction;
+	next_index = current_index + direction;
+	if(next_index >= m_keyframes.size() || next_index < 0) {
+		next_index = current_index - direction;
 	}
+
+	if(direction == -1) {
+		// std::swap(current_index, next_index);
+	}
+
+	auto current_frame = m_keyframes[current_index];
+	auto next_frame = m_keyframes[next_index];
 
 	Transform result;
 
-	switch(interpolationMode) {
-		case InterpolationMode::STEP:
-			return m_keyframes[currentFrame].transform;
-		case InterpolationMode::LINEAR: {
-			double t = (m_time - m_keyframes[currentFrame].time) / (m_keyframes[nextFrame].time - m_keyframes[currentFrame].time);
-			return m_keyframes[currentFrame].transform.Lerp(m_keyframes[nextFrame].transform, t);
+	switch(current_frame.interpolationMode) {
+		case Keyframe::InterpolationMode::STEP:
+			return m_keyframes[current_index].transform;
+		case Keyframe::InterpolationMode::LINEAR: {
+			double t = (m_time - m_keyframes[current_index].time) / (m_keyframes[next_index].time - m_keyframes[current_index].time);
+			return m_keyframes[current_index].transform.Lerp(m_keyframes[next_index].transform, t);
+		}
+		case Keyframe::InterpolationMode::BEZIER: {
+			double t = (m_time - m_keyframes[current_index].time) / (m_keyframes[next_index].time - m_keyframes[current_index].time);
+
+			int cp1 = 0, cp2 = 1;
+			if(direction == -1)
+			{
+				cp1 = 0, cp2 =1;
+			}
+
+			return m_keyframes[current_index].transform.BezierInterpolation(m_keyframes[next_index].transform, current_frame.controlPoints[cp1], current_frame.controlPoints[cp2], t);
 		}
 	}
 
-	return m_keyframes[currentFrame].transform;
+	return m_keyframes[current_index].transform;
 }
 
 double Animation::GetTime() const {

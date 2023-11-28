@@ -20,6 +20,7 @@ class Transform {
 	Matrix4 getMatrix() const;
 
 	Transform Lerp(const Transform& other, double t) const;
+	Transform BezierInterpolation(const Transform& other, const Transform& c1, const Transform& c2, double t) const;
 
    private:
 	Vector3 m_translation;

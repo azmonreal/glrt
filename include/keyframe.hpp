@@ -7,12 +7,21 @@
 namespace GLRT {
 class Keyframe {
    public:
+	enum class InterpolationMode {
+		STEP,
+		LINEAR,
+		BEZIER,
+	};
+
 	Keyframe();
-	Keyframe(const Transform& transform, double time);
+	Keyframe(const Transform& transform, double time, InterpolationMode interpolationMode = InterpolationMode::LINEAR);
 	~Keyframe();
 
 	Transform transform;
+	Transform controlPoints[2];
 	double time;
+
+	InterpolationMode interpolationMode;
 };
 
 }  // namespace GLRT
