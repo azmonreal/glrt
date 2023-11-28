@@ -51,6 +51,13 @@ Transform::Transform() {
 	m_rotation = Vector3{{0, 0, 0}};
 	m_scale = Vector3{{1, 1, 1}};
 }
+
+Transform::Transform(const Vector3& translation, const Vector3& rotation, const Vector3& scale) {
+	m_translation = translation;
+	m_rotation = rotation;
+	m_scale = scale;
+}
+
 Transform::~Transform() {}
 
 void Transform::translate(const Vector3& translation) {

@@ -14,7 +14,7 @@ class Keyframe {
 	};
 
 	Keyframe();
-	Keyframe(const Transform& transform, double time, InterpolationMode interpolationMode = InterpolationMode::LINEAR);
+	Keyframe(const Transform& transform, double time, InterpolationMode interpolationMode = InterpolationMode::LINEAR, Transform cp1 = Transform{}, Transform cp2 = Transform{});
 	~Keyframe();
 
 	Transform transform;
