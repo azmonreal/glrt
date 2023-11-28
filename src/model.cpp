@@ -20,7 +20,6 @@ bool Model::load(const std::string& path) {
 	meshes.clear();
 
 	name = std::filesystem::path(path).filename().string();
-	std::cout << "Model name: " << name << std::endl;
 	auto dir = std::filesystem::path(path).parent_path();
 
 	std::string line;
@@ -45,7 +44,6 @@ bool Model::load(const std::string& path) {
 			}
 			mesh = Mesh{};
 			stream >> mesh.name;
-			std::cout << "start_index: " << start_index << std::endl;
 		} else if(token == "v") {
 			Vertex v;
 			stream >> v.position[0] >> v.position[1] >> v.position[2];
@@ -113,6 +111,7 @@ bool Model::load_materials(const std::string& path) {
 			}
 			stream >> name;
 		} else if(token == "Ka") {
+
 			stream >> material.ambient[0] >> material.ambient[1] >> material.ambient[2];
 		} else if(token == "Kd") {
 			stream >> material.diffuse[0] >> material.diffuse[1] >> material.diffuse[2];
