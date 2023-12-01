@@ -27,7 +27,7 @@ class Model {
 	std::vector<Mesh> meshes;
 	std::map<std::string, Material> materials;
 
-	Animation animation;
-	Transform transform;
+	Animation animation{};
+	Transform transform{};
 };
 }  // namespace GLRT

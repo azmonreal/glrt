@@ -21,7 +21,7 @@ class Mesh {
 	std::vector<Face> faces;
 	std::string material;
 
-	Animation animation;
+	Animation animation{};
 	Transform transform{};
 };
 }  // namespace GLRT
