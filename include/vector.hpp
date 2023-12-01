@@ -300,20 +300,14 @@ double Vector<N>::length() const {
 
 template <size_t N>
 void Vector<N>::normalize() {
-	double len = length();
-	for(int i = 0; i < N; ++i) {
-		m_data[i] /= len;
-	}
+	if(length() == 0) return;
+	this->operator/=(length());
 }
 
 template <size_t N>
 Vector<N> Vector<N>::normalized() const {
-	Vector<N> result;
-	double len = length();
-	for(int i = 0; i < N; ++i) {
-		result[i] = m_data[i] / len;
-	}
-	return result;
+	if(length() == 0) return Vector<N>{};
+	return Vector<N>{this->operator/(length())};
 }
 
 template <size_t N>
