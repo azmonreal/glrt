@@ -1,5 +1,6 @@
 #pragma once
 
+#include "camera.hpp"
 #include "light.hpp"
 #include "model.hpp"
 
@@ -13,5 +14,7 @@ void glrtDrawLights(std::vector<Light> lights);
 void glrtDrawLine(Vector3 start, Vector3 end, Color start_color, Color end_color);
 void glrtDrawLine(Vector3 start, Vector3 end, Color c={1});
 void glrtDrawSphere(Vector3 pos, double radius, Color c={1});
+
+void glrtUpdateCamera(Camera camera);
 
 }  // namespace GLRT

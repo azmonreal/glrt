@@ -60,6 +60,18 @@ Transform::Transform(const Vector3& translation, const Vector3& rotation, const 
 
 Transform::~Transform() {}
 
+Vector3 Transform::getTranslation() const {
+	return m_translation;
+}
+
+Vector3 Transform::getRotation() const {
+	return m_rotation;
+}
+
+Vector3 Transform::getScale() const {
+	return m_scale;
+}
+
 void Transform::translate(const Vector3& translation) {
 	m_translation += translation;
 }

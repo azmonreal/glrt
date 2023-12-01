@@ -5,6 +5,7 @@
 
 #include <iostream>
 
+#include "camera.hpp"
 #include "light.hpp"
 
 namespace GLRT {
@@ -117,5 +118,18 @@ void glrtDrawSphere(Vector3 pos, double radius, Color c) {
 	glTranslated(pos[0], pos[1], pos[2]);
 	glutSolidSphere(radius, 20, 20);
 	glPopMatrix();
+}
+
+void glrtUpdateCamera(Camera camera) {
+	auto position = camera.GetPosition();
+	auto forward = camera.GetForward();
+	auto up = camera.GetUp();
+
+	auto dir = (position + forward);
+
+	gluLookAt(
+		position[0], position[1], position[2],
+		dir[0], dir[1], dir[2],
+		up[0], up[1], up[2]);
 }
 }  // namespace GLRT

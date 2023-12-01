@@ -14,6 +14,10 @@ class Transform {
 	Transform(const Vector3& translation, const Vector3& rotation, const Vector3& scale);
 	~Transform();
 
+	Vector3 getTranslation() const;
+	Vector3 getRotation() const;
+	Vector3 getScale() const;
+
 	void translate(const Vector3& translation);
 	void rotate(const Vector3& rotation);
 	void scale(const Vector3& scale);

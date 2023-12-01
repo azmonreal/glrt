@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+#include "camera.hpp"
 #include "glrt.hpp"
 
 using namespace GLRT;
@@ -13,6 +14,12 @@ using namespace std;
 std::vector<Model> models{};
 Light ambient{{1}, {{0.0, 0.0, 0.0}}, {{0.0, 0.0, 0.0}}, 0.5};
 std::vector<Light> lights;
+
+Camera main_camera{Transform{
+	{{10, 10, 10}},
+	{{36, -135, 0}},
+	{1},
+}};
 
 std::map<std::string, Color> colors = {
 	{"red", {{1.0, 0.0, 0.0}}},
@@ -61,7 +68,7 @@ void init(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	gluLookAt(00.0, 10.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	glrtUpdateCamera(main_camera);
 
 	glEnable(GL_DEPTH_TEST);
 }
@@ -77,7 +84,7 @@ int main(int argc, char** argv) {
 	Model sphere;
 	sphere.load("resources/sphere.obj");
 
-	sphere.transform.scale(Vector3{3});
+	sphere.transform.scale(Vector3{2});
 
 	Transform kf1c{};
 	kf1c.rotate(Vector3{{0, 0, 0}});
@@ -94,45 +101,45 @@ int main(int argc, char** argv) {
 
 	auto red_light = Light{
 		{colors["red"]},
-		{{-10.0, -10.0, 10.0}},
+		{{-5.0, -5.0, 5.0}},
 		{0},
-		0.5,
+		1.0,
 	};
 	auto blue_light = Light{
 		{colors["blue"]},
-		{{10.0, -10.0, -10.0}},
+		{{5.0, -5.0, -5.0}},
 		{0},
-		0.5,
+		1.0,
 	};
 	auto magenta_light = Light{
 		{colors["magenta"]},
-		{{10.0, -10.0, 10.0}},
+		{{5.0, -5.0, 5.0}},
 		{0},
-		0.5,
+		1.0,
 	};
 	auto green_light = Light{
 		{colors["green"]},
-		{{-10.0, 10.0, -10.0}},
+		{{-5.0, 5.0, -5.0}},
 		{0},
-		0.5,
+		1.0,
 	};
 	auto yellow_light = Light{
 		{colors["yellow"]},
-		{{-10.0, 10.0, 10.0}},
+		{{-5.0, 5.0, 5.0}},
 		{0},
-		0.5,
+		1.0,
 	};
 	auto cyan_light = Light{
 		{colors["cyan"]},
-		{{10.0, 10.0, -10.0}},
+		{{5.0, 5.0, -5.0}},
 		{0},
-		0.5,
+		1.0,
 	};
 	auto white_light = Light{
 		{colors["white"]},
-		{{10.0, 10.0, 10.0}},
+		{{5.0, 5.0, 5.0}},
 		{0},
-		0.5,
+		1.0,
 	};
 
 	lights.push_back(red_light);
