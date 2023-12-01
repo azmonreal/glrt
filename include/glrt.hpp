@@ -4,7 +4,7 @@
 #include "model.hpp"
 
 namespace GLRT {
-void glrtDrawMesh(Mesh mesh, Transform model_transform, Material material, Light ambient, std::vector<Light> lights, bool debug=false);
+void glrtDrawMesh(Mesh& mesh, Matrix4 model_matrix, Material material, Light ambient, std::vector<Light> lights, bool debug=false);
 void glrtDrawModel(Model& model, Light ambient, std::vector<Light> lights, bool debug=false);
 void glrtUpdateModel(Model& model, double delta_time);
 

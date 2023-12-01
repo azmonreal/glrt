@@ -9,9 +9,9 @@
 
 namespace GLRT {
 
-void glrtDrawMesh(Mesh mesh, Transform model_transform, Material material, Light ambient, std::vector<Light> lights, bool debug) {
+void glrtDrawMesh(Mesh& mesh, Matrix4 model_matrix, Material material, Light ambient, std::vector<Light> lights, bool debug) {
 	Transform mesh_transform = mesh.transform;
-	auto combined_matrix = model_transform.getMatrix() * mesh_transform.getMatrix();
+	auto combined_matrix = model_matrix * mesh_transform.getMatrix() * mesh.animation.GetTransform().getMatrix();
 
 	for(auto face : mesh.faces) {
 		Vector3 normal = Vector4{combined_matrix * Matrix4x1{face.normal, 0}}.normalized();
@@ -34,8 +34,6 @@ void glrtDrawMesh(Mesh mesh, Transform model_transform, Material material, Light
 
 			auto temp = light_dir.length();
 			if(light_dir.length() != 0) dir_to_light = light_dir * -1;
-
-			// std::cout << "dir_to_light: " << dir_to_light << std::endl;
 
 			double factor = normal.dot(dir_to_light);
 			if(factor < 0) factor = 0;
@@ -73,9 +71,12 @@ void glrtDrawMesh(Mesh mesh, Transform model_transform, Material material, Light
 }
 
 void glrtDrawModel(Model& model, Light ambient, std::vector<Light> lights, bool debug) {
+	auto model_matrix = model.transform.getMatrix() * model.animation.GetTransform().getMatrix();
+
 	for(auto& mesh : model.meshes) {
 		auto material = model.materials[mesh.material];
-		glrtDrawMesh(mesh, model.transform, model.materials[mesh.material], ambient, lights, debug);
+
+		glrtDrawMesh(mesh, model_matrix, model.materials[mesh.material], ambient, lights, debug);
 	}
 }
 
