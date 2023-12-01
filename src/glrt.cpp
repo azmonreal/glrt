@@ -21,12 +21,13 @@ void glrtDrawMesh(Mesh& mesh, Matrix4 model_matrix, Material material, Light amb
 			glrtDrawLine(center, center + normal, {1}, {1});
 		}
 
-		Color ambient_c = material.diffuse * ambient.color;
+		Color ambient_c = material.diffuse * ambient.color * ambient.intensity;
 
 		Color diffuse_c;
 
 		for(auto light : lights) {
 			auto light_c = light.color;
+			auto light_i = light.intensity;
 			auto light_dir = light.direction.normalized();
 			auto light_pos = light.position;
 
@@ -38,10 +39,10 @@ void glrtDrawMesh(Mesh& mesh, Matrix4 model_matrix, Material material, Light amb
 			double factor = normal.dot(dir_to_light);
 			if(factor < 0) factor = 0;
 
-			diffuse_c += light_c * factor * material.diffuse;
+			diffuse_c += light_c * light_i * factor * material.diffuse;
 
 			if(debug) {
-				glrtDrawLine(center, center + dir_to_light, light_c);
+				glrtDrawLine(center, center + dir_to_light * factor, light_c * light_i, light_c);
 			}
 		}
 
