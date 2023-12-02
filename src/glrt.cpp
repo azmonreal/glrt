@@ -22,7 +22,7 @@ void glrtDrawMesh(Mesh& mesh, Matrix4 model_matrix, Material material, Light amb
 			glrtDrawLine(center, center + normal, {1}, {1});
 		}
 
-		Color ambient_c = material.diffuse * ambient.color * ambient.intensity;
+		Color ambient_c = material.ambient * ambient.color * ambient.intensity;
 
 		Color diffuse_c;
 
@@ -76,16 +76,16 @@ void glrtDrawModel(Model& model, Light ambient, std::vector<Light> lights, bool 
 	auto model_matrix = model.transform.getMatrix() * model.animation.GetTransform().getMatrix();
 
 	for(auto& mesh : model.meshes) {
-		auto material = model.materials[mesh.material];
+		auto material = model.materials[mesh.second.material];
 
-		glrtDrawMesh(mesh, model_matrix, model.materials[mesh.material], ambient, lights, debug);
+		glrtDrawMesh(mesh.second, model_matrix, model.materials[mesh.second.material], ambient, lights, debug);
 	}
 }
 
 void glrtUpdateModel(Model& model, double time_delta) {
 	model.animation.Update(time_delta);
 	for(auto& mesh : model.meshes) {
-		mesh.animation.Update(time_delta);
+		mesh.second.animation.Update(time_delta);
 	}
 }
 

@@ -24,7 +24,7 @@ bool Model::load(const std::string& path) {
 
 	std::string line;
 
-	Mesh mesh;
+	Mesh mesh{};
 	int start_index = 1;
 
 	while(std::getline(file, line)) {
@@ -39,7 +39,7 @@ bool Model::load(const std::string& path) {
 			load_materials((dir / material_path).string());
 		} else if(token == "o") {
 			if(mesh.name != "") {
-				meshes.push_back(mesh);
+				meshes.insert({mesh.name, mesh});
 				start_index += mesh.vertices.size();
 			}
 			mesh = Mesh{};
@@ -79,7 +79,7 @@ bool Model::load(const std::string& path) {
 			// std::cout << "Unknown token: " << token << std::endl;
 		}
 	}
-	meshes.push_back(mesh);
+	meshes.insert({mesh.name, mesh});
 
 	return true;
 }
@@ -133,7 +133,7 @@ void Model::print() {
 	std::cout << "Model: " << name << std::endl;
 	std::cout << "Meshes: " << meshes.size() << std::endl;
 	for(auto mesh : meshes) {
-		mesh.print();
+		mesh.second.print();
 	}
 }
 }  // namespace GLRT

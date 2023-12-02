@@ -24,7 +24,7 @@ class Model {
 	void print();
 
 	std::string name;
-	std::vector<Mesh> meshes;
+	std::map<std::string, Mesh> meshes;
 	std::map<std::string, Material> materials;
 
 	Animation animation{};
