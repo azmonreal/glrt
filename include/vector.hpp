@@ -301,13 +301,21 @@ double Vector<N>::length() const {
 template <size_t N>
 void Vector<N>::normalize() {
 	if(length() == 0) return;
-	this->operator/=(length());
+	double l = length();
+	for(int i = 0; i < N; ++i) {
+		m_data[i] /= l;
+	}
 }
 
 template <size_t N>
 Vector<N> Vector<N>::normalized() const {
 	if(length() == 0) return Vector<N>{};
-	return Vector<N>{this->operator/(length())};
+	double l = length();
+	Vector<N> result;
+	for(int i = 0; i < N; ++i) {
+		result[i] = m_data[i] / l;
+	}
+	return result;
 }
 
 template <size_t N>

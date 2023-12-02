@@ -49,7 +49,13 @@ void Animation::Update(double time) {
 }
 
 Transform Animation::GetTransform() const {
-	// find keyframe with time less then m_time
+	if(m_keyframes.size() == 0) {
+		return Transform{};
+	}
+	else if(m_keyframes.size() == 1) {
+		return m_keyframes[0].transform;
+	}
+
 	size_t current_index, next_index;
 
 	if(direction == 1) {
