@@ -27,16 +27,27 @@ void Animation::Update(double time) {
 
 	switch(loopMode) {
 		case LoopMode::ONCE:
-			if(m_time > duration) {
+			if(m_time < 0.0) {
+				m_time = 0.0;
+			} else if(m_time > duration) {
 				m_time = duration;
 			}
 			break;
 		case LoopMode::LOOP:
-			if(m_time > duration) {
+			if(m_time < 0.0) {
+				m_time = duration;
+			} else if(m_time > duration) {
 				m_time = 0.0;
 			}
 			break;
 		case LoopMode::PING_PONG:
+			if(m_time > duration) {
+				m_time = duration;
+				direction = -1;
+			} else if(m_time < 0.0) {
+				m_time = 0.0;
+				direction = 1;
+			}
 			if(m_time > duration) {
 				m_time = duration;
 				direction = -1;
@@ -51,8 +62,7 @@ void Animation::Update(double time) {
 Transform Animation::GetTransform() const {
 	if(m_keyframes.size() == 0) {
 		return Transform{};
-	}
-	else if(m_keyframes.size() == 1) {
+	} else if(m_keyframes.size() == 1) {
 		return m_keyframes[0].transform;
 	}
 
@@ -105,9 +115,8 @@ Transform Animation::GetTransform() const {
 			double t = (m_time - m_keyframes[current_index].time) / (m_keyframes[next_index].time - m_keyframes[current_index].time);
 
 			int cp1 = 0, cp2 = 1;
-			if(direction == -1)
-			{
-				cp1 = 0, cp2 =1;
+			if(direction == -1) {
+				cp1 = 0, cp2 = 1;
 			}
 
 			return m_keyframes[current_index].transform.BezierInterpolation(m_keyframes[next_index].transform, current_frame.controlPoints[cp1], current_frame.controlPoints[cp2], t);
