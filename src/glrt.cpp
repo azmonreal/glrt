@@ -91,7 +91,7 @@ void glrtUpdateModel(Model& model, double time_delta) {
 
 void glrtDrawLights(std::vector<Light> lights) {
 	for(auto light : lights) {
-		glrtDrawSphere(light.position, 0.1, light.color);
+		glrtDrawSphere(light.position, 0.3, light.color);
 
 		if(light.direction.length() > 0) {
 			glrtDrawLine(light.position, light.position + light.direction, light.color, light.color);
